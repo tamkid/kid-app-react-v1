@@ -5,13 +5,13 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { makeStyles } from '@mui/styles';
 import * as React from 'react';
 import { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
+import Register from '../../features/Auth/components/Register';
 
 const useStyles = makeStyles((theme) => ({
   link: {
@@ -59,8 +59,9 @@ export default function Header() {
       </Box>
 
       <Dialog open={open}>
-        <DialogTitle>Sign up an account</DialogTitle>
-        <DialogContent></DialogContent>
+        <DialogContent>
+          <Register onCloseDialog={handleClose} />
+        </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
         </DialogActions>

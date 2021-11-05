@@ -3,6 +3,8 @@ import './App.css';
 import Header from './components/Header';
 import Album from './features/Album';
 import Todo from './features/Todo';
+import { useEffect } from 'react';
+import productApi from './api/productApi';
 
 function App() {
   return (
