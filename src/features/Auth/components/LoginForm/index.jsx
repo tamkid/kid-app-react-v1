@@ -13,41 +13,25 @@ import * as yup from 'yup';
 import InputField from '../../../../components/form-fields/InputField';
 import PasswordField from '../../../../components/form-fields/PasswordField';
 
-RegisterForm.propTypes = {
+LoginForm.propTypes = {
   formSubmit: PropTypes.func,
 };
 
-function RegisterForm(props) {
+function LoginForm(props) {
   const schema = yup.object({
-    fullName: yup
-      .string()
-      .required('Please enter your full name')
-      .test('Should has at lease 2 word', 'Please enter at least 2 word for full name', (value) => {
-        return value.split(' ').length >= 2;
-      }),
-    email: yup.string().required('Please enter your email').email('Please enter a valid email'),
-    password: yup
-      .string()
-      .required('Please enter password')
-      .min(6, 'Password must be at lease 6 characters'),
-    retypePassword: yup
-      .string()
-      .required('Please enter retype password')
-      .oneOf([yup.ref('password')], 'Retype password must be same password'),
+    identifier: yup.string().required('Please enter your user id/email'),
+    password: yup.string().required('Please enter password'),
   });
 
   const { formSubmit } = props;
   const {
     handleSubmit,
     control,
-    //reset,
     formState: { errors, isSubmitting },
   } = useForm({
     defaultValues: {
-      fullName: '',
-      email: '',
+      identifier: '',
       password: '',
-      retypePassword: '',
     },
     resolver: yupResolver(schema),
   });
@@ -56,7 +40,6 @@ function RegisterForm(props) {
     if (formSubmit) {
       await formSubmit(data);
     }
-    //reset();
   };
 
   return (
@@ -75,35 +58,24 @@ function RegisterForm(props) {
       </Avatar>
 
       <Typography component="h1" variant="h5">
-        Sign up
+        Sign in
       </Typography>
 
       <Box component="form" onSubmit={handleSubmit(handleFormSubmit)} sx={{ mt: 3 }}>
         <Grid container>
           <Grid item xs={12}>
-            <InputField name="fullName" control={control} errors={errors} label="Full Name" />
-          </Grid>
-          <Grid item xs={12}>
-            <InputField name="email" control={control} errors={errors} label="Email" />
+            <InputField name="identifier" control={control} errors={errors} label="User Id/Email" />
           </Grid>
           <Grid item xs={12}>
             <PasswordField name="password" control={control} errors={errors} label="Password" />
           </Grid>
-          <Grid item xs={12}>
-            <PasswordField
-              name="retypePassword"
-              control={control}
-              errors={errors}
-              label="Retype Password"
-            />
-          </Grid>
         </Grid>
         <Button type="submit" fullWidth variant="contained" sx={{ mt: 2 }}>
-          Sign Up
+          Sign In
         </Button>
       </Box>
     </Box>
   );
 }
 
-export default RegisterForm;
+export default LoginForm;

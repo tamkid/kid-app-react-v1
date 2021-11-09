@@ -21,6 +21,16 @@ axiosClient.interceptors.response.use(
     return response.data;
   },
   function (error) {
+    const { status, config, data } = error.response;
+    const urls = ['/auth/local', '/auth/local/register'];
+    if (status === 400 && urls.includes(config.url)) {
+      const lstData = data.data || [];
+      const dataItem = lstData.length > 0 ? lstData[0] : {};
+      const messages = dataItem.messages || [];
+      const messageItem = messages.length > 0 ? messages[0] : {};
+      throw new Error(messageItem.message);
+    }
+
     return Promise.reject(error);
   }
 );
