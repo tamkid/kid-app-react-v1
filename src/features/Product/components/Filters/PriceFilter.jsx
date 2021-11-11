@@ -23,7 +23,6 @@ function PriceFilter({ onChange = null }) {
 
   const handleClick = () => {
     if (!onChange) return;
-    console.log({ values });
     if (
       (values.salePrice_gte || values.salePrice_lte) &&
       Number.parseInt(values.salePrice_gte) <= Number.parseInt(values.salePrice_lte) &&
