@@ -79,7 +79,8 @@ const FILTER_LIST = [
   {
     id: 4,
     getLabel: (filters, categories) => {
-      return categories.find((o) => o.id === filters['category.id']).name;
+      const category = categories.find((o) => o.id === Number.parseInt(filters['category.id']));
+      return category ? category.name : '';
     },
     isActive: () => true,
     isVisible: (filters) => Object.keys(filters).includes('category.id'),

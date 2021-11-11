@@ -2,6 +2,7 @@ import { Container, Grid, Pagination, Paper } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Box } from '@mui/system';
 import React, { useEffect, useState } from 'react';
+import { useHistory, useLocation } from 'react-router';
 import productApi from '../../../api/productApi';
 import ProductParams from '../../../constances/product-params';
 import FilterViewer from '../components/Filters/FilterViewer';
@@ -9,6 +10,7 @@ import ProductFilters from '../components/ProductFilters';
 import ProductList from '../components/ProductList';
 import ProductSort from '../components/ProductSort';
 import SkeletonProductList from '../components/SkeletonProductList';
+import queryString from 'query-string';
 
 const useStyle = makeStyles((theme) => ({
   pagination: {
@@ -23,18 +25,32 @@ const useStyle = makeStyles((theme) => ({
 function ListPage(props) {
   const classes = useStyle();
 
+  const history = useHistory();
+  const location = useLocation();
+  const queryParams = queryString.parse(location.search);
+
   const [productList, setProductList] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState({
-    _page: 1,
-    _limit: ProductParams.LIMIT_DEFAULT,
-    _sort: 'salePrice:ASC',
-  });
+
+  const [filter, setFilter] = useState(() => ({
+    ...queryParams,
+    _page: Number.parseInt(queryParams._page) || 1,
+    _limit: Number.parseInt(queryParams._limit) || ProductParams.LIMIT_DEFAULT,
+    _sort: queryParams._sort || 'salePrice:ASC',
+  }));
+
   const [pagination, setPagination] = useState({
     limit: 10,
     page: 1,
     total: 10,
   });
+
+  useEffect(() => {
+    history.push({
+      pathname: history.location.pathname,
+      search: queryString.stringify(filter),
+    });
+  }, [history, filter]);
 
   useEffect(() => {
     (async () => {
